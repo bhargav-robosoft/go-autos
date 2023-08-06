@@ -1,4 +1,4 @@
-package main
+package api
 
 import (
 	"autos/controller"
@@ -14,7 +14,7 @@ var (
 	autosController controller.AutosController = controller.NewAutosController(service.NewAutosService())
 )
 
-func main() {
+func Handler(w http.ResponseWriter, r *http.Request) {
 	server := gin.Default()
 
 	server.GET("/", func(c *gin.Context) {
@@ -30,5 +30,5 @@ func main() {
 	server.PATCH("/edit-car", middleware.TokenAuthMiddleware(true), autosController.UpdateCar)
 	server.DELETE("/delete-car", middleware.TokenAuthMiddleware(true), autosController.DeleteCar)
 
-	server.Run(":8080")
+	server.ServeHTTP(w, r)
 }
